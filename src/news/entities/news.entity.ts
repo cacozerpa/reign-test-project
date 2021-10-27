@@ -11,7 +11,7 @@ export class News {
   @Column()
   author: string;
 
-  @Column("simple-array")
+  @Column('simple-array')
   _tags: string[];
 
   @Column()
