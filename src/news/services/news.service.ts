@@ -20,12 +20,34 @@ export class NewsService {
     return news;
   }
 
-  findAll() {
-    return this.newsRepo.find();
+  async findAll(page: number = 1) {
+    return await this.newsRepo.find({
+      skip: 5 * (page-1),
+      take: 5
+    });
   }
 
-  findOne(id: number) {
-    return this.newsRepo.findOne(id);
+  async findOneByAuthor(body: any) {
+
+    try{
+      const news = await this.newsRepo.find({where: {author: body}});
+
+      if(!news){
+        return {
+          status: 400,
+          message: 'News not Found!',
+        }
+      }
+
+      return {
+          status: 200,
+          message: 'News Found!',
+          data: news
+        }
+    }catch(error){
+      throw new error;
+    }
+
   }
 
   async create() {
@@ -33,12 +55,9 @@ export class NewsService {
       const news = await this.getNews();
 
       news.map(async n => {
-      if(n.title === null){
-        n.title = 'Reign New ' + Math.floor(Math.random() * 10);
-      }
       const newHit = new News();
 
-      newHit.title = n.title;
+      newHit.title = n.title ? n._highlightResult.title.value : n.story_title;
       newHit.author = n.author;
       newHit._tags = n._tags;
       newHit.created_at = n.created_at;

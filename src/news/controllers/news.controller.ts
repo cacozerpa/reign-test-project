@@ -17,14 +17,20 @@ export class NewsController {
   // eslint-disable-next-line prettier/prettier
   constructor(private newsService: NewsService) { }
 
-  @Get()
-  getAll() {
-    return this.newsService.findAll();
+  @Get('a')
+  async get() {
+    const res = await axios.get('https://hn.algolia.com/api/v1/search_by_date?query=nodejs');
+    return res.data.hits;
   }
 
-  @Get(':id')
-  getOne(@Param('id') id: number) {
-    return this.newsService.findOne(id);
+  @Get('page/:page')
+  async getAll(@Param('page') page: number) {
+    return await this.newsService.findAll(page);
+  }
+
+  @Get('author')
+  async getOne(@Body() body: any) {
+    return await this.newsService.findOneByAuthor(body.author);
   }
 
   @Post()
@@ -40,14 +46,13 @@ export class NewsController {
     return {
       status: 200,
       message: 'New created successfully!',
-      data: res
     }
   }
 
-  @Put(':id')
-  update(@Param('id') id: number, @Body() body: any) {
-    return this.newsService.update(id, body);
-  }
+  // @Put(':id')
+  // update(@Param('id') id: number, @Body() body: any) {
+  //   return this.newsService.update(id, body);
+  // }
 
   @Delete(':id')
   delete(@Param('id') id: number) {
