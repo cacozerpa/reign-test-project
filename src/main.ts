@@ -9,14 +9,7 @@ async function bootstrap() {
     .setTitle('Reign Test API')
     .setDescription('Reign Test API Documentation')
     .setVersion('1.0.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'jwt',
-      },
-      'access_token',
-    )
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
