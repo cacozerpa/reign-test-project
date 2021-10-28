@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
   imports: [
     JwtModule.register({
       secret: 'super-secret',
+      signOptions: { expiresIn: '2H'},
     }),
   ],
   providers: [AuthService, JwtStrategy],
