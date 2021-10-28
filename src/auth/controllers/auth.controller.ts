@@ -8,9 +8,7 @@ export class AuthController {
 
   @Post()
   signInLocal() {
-    const token = this.authService.signInLocal();
-    return {
-      access_token: token,
-    };
+    return this.authService.signInLocal();
+
   }
 }

@@ -15,6 +15,14 @@ export class NewsService {
     return date.toLocaleString('en-US', {month: 'long'}).toLowerCase();
   }
 
+  convertTags(tags: string | string[]) {
+    if(Array.isArray(tags)){
+      return tags;
+    }
+
+    return tags?.trim().length > 0 ? tags.split(',') : [];
+  }
+
   async getNews() {
     const response = await axios.get(
       'https://hn.algolia.com/api/v1/search_by_date?query=nodejs',
@@ -26,15 +34,29 @@ export class NewsService {
   }
 
   async findAll(page = 1) {
-    return await this.newsRepo.find({
+    try{
+    const news = await this.newsRepo.find({
       skip: 5 * (page - 1),
       take: 5,
     });
+
+    return {
+      status: 200,
+      message: 'News Found!',
+      data: news,
+    }
+    }catch(err){
+      throw new Error('No News Found!');
+    }
+    
   }
 
-  async findOneByAuthor(body: any) {
+  async findOneByAuthor(author: string, page = 1) {
     try {
-      const news = await this.newsRepo.find({ where: { author: body } });
+      const news = await this.newsRepo.find({ where: { author: author },
+       skip: 5 * (page - 1),
+       take: 5,
+      });
 
       return {
         status: 200,
@@ -42,7 +64,7 @@ export class NewsService {
         data: news,
       };
     } catch (error) {
-      throw new error();
+      throw new Error('No news found under this author!');
     }
   }
 
@@ -56,29 +78,42 @@ export class NewsService {
         data: res,
       };
     } catch (error) {
-      throw new error();
+      throw new Error('No news found under this title!');
     }
   }
 
-  async findByDate(body: string, page = 1) {
-    // try {
+  async findByDate(month: string, page = 1) {
+    try {
     const res = await this.newsRepo.find({ where:{
-      month: body},
+      month: month},
       skip: 5 * (page - 1),
       take: 5,
     });
 
     return res;
-    // } catch (err) {
-    //   throw new NotFoundException('Error', err);
-    // }
+    } catch (error) {
+      throw new Error('Error finding under this date');
+    }
   }
 
-  async findByTags(body: any) {
-    const res = await this.newsRepo.find({
-      _tags: Any([body._tags]),
-    });
-    return res;
+  async findByTags(tags: string) {
+    try{
+
+      const values = this.convertTags(tags);
+      console.log(values)
+      const res = await this.newsRepo.find({
+        _tags: values ,
+      });
+      return {
+        status: 200,
+        message: 'News Found!',
+        data: res
+      };
+    }catch(error){
+
+      throw new Error('Error finding news under this tags!');
+    }
+    
   }
 
   async create() {
@@ -93,16 +128,32 @@ export class NewsService {
         newHit._tags = n._tags;
         newHit.created_at = n.created_at;
         newHit.month = this.convertDate(new Date (n.created_at));
-        return this.newsRepo.save(newHit);
+        const res = this.newsRepo.save(newHit);
+
+        return {
+          status: 200,
+          message: 'News Created Successfully!'
+        }
       });
     } catch (error) {
-      throw new error();
+      throw new Error('Creating news!');
     }
   }
 
   async delete(id: number) {
+    try{
+
     await this.newsRepo.delete(id);
-    return true;
+
+    return {
+      status: 200,
+      message: 'New Deleted!'
+    };
+
+    }catch(error) {
+      throw new Error('Error Deleting New!')
+    }
+    
   }
 
   @Cron(CronExpression.EVERY_HOUR)

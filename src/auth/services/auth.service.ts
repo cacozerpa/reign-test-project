@@ -6,6 +6,12 @@ export class AuthService {
   // eslint-disable-next-line prettier/prettier
   constructor(private jwtService: JwtService) { }
   signInLocal() {
-    return this.jwtService.sign({});
+    const token = this.jwtService.sign({});
+
+    return{
+      status: 200,
+      message: 'access_token generated!',
+      access_token: token,
+    }
   }
 }
