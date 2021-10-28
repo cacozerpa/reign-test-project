@@ -1,6 +1,17 @@
 version: '3.3'
 
 services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - database
+    environment:
+      PORT: 3000
+      
+    ports:
+      - "9000:3000"
   database:
     image: postgres:13
     environment:
@@ -8,7 +19,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=12345
     ports:
-      - '8080:5432'
+      - '4000:5432'
     volumes:
       - ./postgres_data:/var/lib/postgresql
 
