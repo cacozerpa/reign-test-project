@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Any, Repository } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
 
 import { News } from '../entities/news.entity';
@@ -103,4 +104,10 @@ export class NewsService {
     await this.newsRepo.delete(id);
     return true;
   }
+
+  @Cron(CronExpression.EVERY_HOUR)
+    async updateNews() {
+      await this.create();
+    }
+  
 }
