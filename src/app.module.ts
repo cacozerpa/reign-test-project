@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NewsModule } from './news/news.module';
-import { ApiModule } from './api/api.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 8080,
+      port: 4000,
       username: 'user',
       password: '12345',
       database: 'my_db',
@@ -18,7 +18,7 @@ import { ApiModule } from './api/api.module';
       retryAttempts: 3,
     }),
     NewsModule,
-    ApiModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
