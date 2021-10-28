@@ -10,8 +10,9 @@ export class NewsController {
   // eslint-disable-next-line prettier/prettier
   constructor(private newsService: NewsService) { }
 
+
   @UseGuards(AuthGuard('jwt'))
-  @Get('a')
+  @Get('hits')
   async get() {
     const res = await axios.get(
       'https://hn.algolia.com/api/v1/search_by_date?query=nodejs',
@@ -44,9 +45,9 @@ export class NewsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('date')
-  async getByDate(@Body() body: any) {
-    return await this.newsService.findByDate(body.date);
+  @Get('date/:page')
+  async getByDate(@Body() body: any, @Param('page') page: number) {
+    return await this.newsService.findByDate(body.date, page);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -59,11 +60,6 @@ export class NewsController {
       message: 'New created successfully!',
     };
   }
-
-  // @Put(':id')
-  // update(@Param('id') id: number, @Body() body: any) {
-  //   return this.newsService.update(id, body);
-  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')

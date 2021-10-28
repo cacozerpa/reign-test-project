@@ -10,6 +10,10 @@ export class NewsService {
   // eslint-disable-next-line prettier/prettier
   constructor(@InjectRepository(News) private newsRepo: Repository<News>) { }
 
+  convertDate(date: Date) {
+    return date.toLocaleString('en-US', {month: 'long'}).toLowerCase();
+  }
+
   async getNews() {
     const response = await axios.get(
       'https://hn.algolia.com/api/v1/search_by_date?query=nodejs',
@@ -55,10 +59,12 @@ export class NewsService {
     }
   }
 
-  async findByDate(body: Date) {
+  async findByDate(body: string, page = 1) {
     // try {
-    const res = await this.newsRepo.find({
-      created_at: body,
+    const res = await this.newsRepo.find({ where:{
+      month: body},
+      skip: 5 * (page - 1),
+      take: 5,
     });
 
     return res;
@@ -85,18 +91,13 @@ export class NewsService {
         newHit.author = n.author;
         newHit._tags = n._tags;
         newHit.created_at = n.created_at;
+        newHit.month = this.convertDate(new Date (n.created_at));
         return this.newsRepo.save(newHit);
       });
     } catch (error) {
       throw new error();
     }
   }
-
-  // async update(id: number, body: any) {
-  //   const task = await this.newsRepo.findOne(id);
-  //   this.newsRepo.merge(task, body);
-  //   return this.newsRepo.save(task);
-  // }
 
   async delete(id: number) {
     await this.newsRepo.delete(id);

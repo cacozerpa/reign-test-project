@@ -16,4 +16,7 @@ export class News {
 
   @Column()
   created_at: Date;
+
+  @Column()
+  month: string;
 }
