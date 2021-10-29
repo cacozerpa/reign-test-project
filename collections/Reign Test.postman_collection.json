@@ -21,12 +21,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/news/all/1",
+					"raw": "http://localhost:9000/api/news/all/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news",
@@ -62,12 +62,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/news",
+					"raw": "http://localhost:9000/api/news",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news"
@@ -104,12 +104,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/news/author?author=robbiejs&page=1",
+					"raw": "http://localhost:9000/api/news/author?author=robbiejs&page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news",
@@ -145,12 +145,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/news/1",
+					"raw": "http://localhost:9000/api/news/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news",
@@ -188,12 +188,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/news/title?title=How I made Google’s data grid scroll faster with a line of CSS",
+					"raw": "http://localhost:9000/api/news/title?title=",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news",
@@ -202,7 +202,7 @@
 					"query": [
 						{
 							"key": "title",
-							"value": "How I made Google’s data grid scroll faster with a line of CSS"
+							"value": ""
 						}
 					]
 				}
@@ -237,12 +237,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/news/date?date=october&page=1",
+					"raw": "http://localhost:9000/api/news/date?date=october&page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news",
@@ -289,12 +289,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/news/hits",
+					"raw": "http://localhost:9000/api/news/hits",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news",
@@ -332,12 +332,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/news/tags?tags=comment,author_robbiejs,story_29018804",
+					"raw": "http://localhost:9000/api/news/tags?tags=comment&page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"news",
@@ -346,7 +346,11 @@
 					"query": [
 						{
 							"key": "tags",
-							"value": "comment,author_robbiejs,story_29018804"
+							"value": "comment"
+						},
+						{
+							"key": "page",
+							"value": "1"
 						}
 					]
 				}
@@ -370,12 +374,12 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/auth",
+					"raw": "http://localhost:9000/api/auth",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "9000",
 					"path": [
 						"api",
 						"auth"
