@@ -98,13 +98,15 @@ export class NewsService {
     }
   }
 
-  async findByTags(tags: string) {
+  async findByTags(tags: string, page = 1) {
     try {
       const values: string[] = this.convertTags(tags);
 
       const res = await this.newsRepo
         .createQueryBuilder('news')
         .where('news._tags @> (:_tags)::varchar[]', { _tags: values })
+        .take(5)
+        .skip(5 * (page - 1))
         .getMany();
 
       return {
