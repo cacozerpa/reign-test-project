@@ -16,7 +16,7 @@ export class News {
   author: string;
 
   @ApiProperty()
-  @Column('simple-array')
+  @Column('varchar', { array: true })
   _tags: string[];
 
   @ApiProperty()
