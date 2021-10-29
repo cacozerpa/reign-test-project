@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Any, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
 
@@ -15,7 +15,7 @@ export class NewsService {
     return date.toLocaleString('en-US', {month: 'long'}).toLowerCase();
   }
 
-  convertTags(tags: string | string[]) {
+  convertTags(tags: string) {
     if(Array.isArray(tags)){
       return tags;
     }
@@ -98,12 +98,11 @@ export class NewsService {
 
   async findByTags(tags: string) {
     try{
+      
+      const values: string[] = this.convertTags(tags);
 
-      const values = this.convertTags(tags);
-      console.log(values)
-      const res = await this.newsRepo.find({
-        _tags: values ,
-      });
+      const res = await this.newsRepo.createQueryBuilder('news').where('news._tags @> (:_tags)::varchar[]', {_tags: values}).getMany()
+
       return {
         status: 200,
         message: 'News Found!',
@@ -111,7 +110,7 @@ export class NewsService {
       };
     }catch(error){
 
-      throw new Error('Error finding news under this tags!');
+      throw new Error(error);
     }
     
   }
