@@ -1,5 +1,5 @@
 // eslint-disable-next-line prettier/prettier
-import { Body, Controller, Get, Param, Post, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Delete, UseGuards, Query} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 
@@ -23,54 +23,64 @@ export class NewsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('title/:title')
+  @Get('title')
   @ApiBearerAuth()
-  async getOneByTitle(@Param('title') title: string) {
-    const newTitle = title.replace(/_/g, ' ');
+  async getOneByTitle(@Query('title') title: string) {
 
-    return await this.newsService.findByTitle(newTitle);
+    return await this.newsService.findByTitle(title);
+
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('all/:page')
   @ApiBearerAuth()
   async getAll(@Param('page') page: number) {
+
     return await this.newsService.findAll(page);
+
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':author/:page')
+  @Get('author')
   @ApiBearerAuth()
-  async getOneByAuthor(@Param('author') author : string, @Param('page') page : number ) {
+  async getOneByAuthor(@Query('author') author : string, @Query('page') page : number ) {
+
     return await this.newsService.findOneByAuthor(author, page);
+
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('tags/:tags')
+  @Get('tags')
   @ApiBearerAuth()
-  async getByTags(@Param('tags') tags: string) {
-    const newTags = tags.replace(/-/g, ',');
-    return await this.newsService.findByTags(newTags);
+  async getByTags(@Query('tags') tags: string) {
+    return await this.newsService.findByTags(tags);
+
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('date/:date/:page')
+  @Get('date')
   @ApiBearerAuth()
-  async getByDate(@Param('date') date: string, @Param('page') page : number) {
+  async getByDate(@Query('date') date: string, @Query('page') page : number) {
+
     return await this.newsService.findByDate(date, page);
+
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
   @ApiBearerAuth()
   async create() {
+
     return await this.newsService.create();
+
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @ApiBearerAuth()
   delete(@Param('id') id: number) {
+
     return this.newsService.delete(id);
+
   }
 }
