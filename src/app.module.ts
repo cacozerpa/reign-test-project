@@ -2,20 +2,26 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NewsModule } from './news/news.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 4000,
-      username: 'user',
-      password: '12345',
-      database: 'my_db',
-      autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV !== 'production',
-      retryDelay: 3000,
-      retryAttempts: 3,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: 'database',
+        port: 5432,
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB'),
+        autoLoadEntities: true,
+        synchronize: process.env.NODE_ENV !== 'production',
+        retryDelay: 3000,
+        retryAttempts: 3,
+      }),
+      inject: [ConfigService],
     }),
     NewsModule,
     AuthModule,

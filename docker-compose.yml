@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 
 services:
   api:
@@ -8,16 +8,18 @@ services:
     depends_on:
       - database
     environment:
-      PORT: 3000
+      DB: '$DB'
+      DB_USERNAME: '$DB_USERNAME'
+      DB_PASSWORD: '$DB_PASSWORD'
       
     ports:
       - "9000:3000"
   database:
     image: postgres:13
     environment:
-      - POSTGRES_DB=my_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=12345
+      POSTGRES_DB: "${DB}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
     ports:
       - '4000:5432'
     volumes:
