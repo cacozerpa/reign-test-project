@@ -8,10 +8,10 @@ export class AuthService {
   signInLocal() {
     const token = this.jwtService.sign({});
 
-    return{
+    return {
       status: 200,
       message: 'access_token generated!',
       access_token: token,
-    }
+    };
   }
 }

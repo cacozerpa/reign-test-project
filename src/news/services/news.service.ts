@@ -12,11 +12,11 @@ export class NewsService {
   constructor(@InjectRepository(News) private newsRepo: Repository<News>) { }
 
   convertDate(date: Date) {
-    return date.toLocaleString('en-US', {month: 'long'}).toLowerCase();
+    return date.toLocaleString('en-US', { month: 'long' }).toLowerCase();
   }
 
   convertTags(tags: string) {
-    if(Array.isArray(tags)){
+    if (Array.isArray(tags)) {
       return tags;
     }
 
@@ -34,28 +34,28 @@ export class NewsService {
   }
 
   async findAll(page = 1) {
-    try{
-    const news = await this.newsRepo.find({
-      skip: 5 * (page - 1),
-      take: 5,
-    });
+    try {
+      const news = await this.newsRepo.find({
+        skip: 5 * (page - 1),
+        take: 5,
+      });
 
-    return {
-      status: 200,
-      message: 'News Found!',
-      data: news,
-    }
-    }catch(err){
+      return {
+        status: 200,
+        message: 'News Found!',
+        data: news,
+      };
+    } catch (err) {
       throw new Error('No News Found!');
     }
-    
   }
 
   async findOneByAuthor(author: string, page = 1) {
     try {
-      const news = await this.newsRepo.find({ where: { author: author },
-       skip: 5 * (page - 1),
-       take: 5,
+      const news = await this.newsRepo.find({
+        where: { author: author },
+        skip: 5 * (page - 1),
+        take: 5,
       });
 
       return {
@@ -84,35 +84,37 @@ export class NewsService {
 
   async findByDate(month: string, page = 1) {
     try {
-    const res = await this.newsRepo.find({ where:{
-      month: month},
-      skip: 5 * (page - 1),
-      take: 5,
-    });
+      const res = await this.newsRepo.find({
+        where: {
+          month: month,
+        },
+        skip: 5 * (page - 1),
+        take: 5,
+      });
 
-    return res;
+      return res;
     } catch (error) {
       throw new Error('Error finding under this date');
     }
   }
 
   async findByTags(tags: string) {
-    try{
-      
+    try {
       const values: string[] = this.convertTags(tags);
 
-      const res = await this.newsRepo.createQueryBuilder('news').where('news._tags @> (:_tags)::varchar[]', {_tags: values}).getMany()
+      const res = await this.newsRepo
+        .createQueryBuilder('news')
+        .where('news._tags @> (:_tags)::varchar[]', { _tags: values })
+        .getMany();
 
       return {
         status: 200,
         message: 'News Found!',
-        data: res
+        data: res,
       };
-    }catch(error){
-
+    } catch (error) {
       throw new Error(error);
     }
-    
   }
 
   async create() {
@@ -126,13 +128,13 @@ export class NewsService {
         newHit.author = n.author;
         newHit._tags = n._tags;
         newHit.created_at = n.created_at;
-        newHit.month = this.convertDate(new Date (n.created_at));
-        const res = this.newsRepo.save(newHit);
+        newHit.month = this.convertDate(new Date(n.created_at));
+        this.newsRepo.save(newHit);
 
         return {
           status: 200,
-          message: 'News Created Successfully!'
-        }
+          message: 'News Created Successfully!',
+        };
       });
     } catch (error) {
       throw new Error('Creating news!');
@@ -140,24 +142,20 @@ export class NewsService {
   }
 
   async delete(id: number) {
-    try{
+    try {
+      await this.newsRepo.delete(id);
 
-    await this.newsRepo.delete(id);
-
-    return {
-      status: 200,
-      message: 'New Deleted!'
-    };
-
-    }catch(error) {
-      throw new Error('Error Deleting New!')
+      return {
+        status: 200,
+        message: 'New Deleted!',
+      };
+    } catch (error) {
+      throw new Error('Error Deleting New!');
     }
-    
   }
 
   @Cron(CronExpression.EVERY_HOUR)
-    async updateNews() {
-      await this.create();
-    }
-  
+  async updateNews() {
+    await this.create();
+  }
 }

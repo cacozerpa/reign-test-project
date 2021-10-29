@@ -8,15 +8,17 @@ describe('NewsService', () => {
 
   const mockNewsRepo = {
     //TODO: Complete This
-  }
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [NewsService, {
-        provide: getRepositoryToken(News),
-        useValue: mockNewsRepo
-      }],
-      
+      providers: [
+        NewsService,
+        {
+          provide: getRepositoryToken(News),
+          useValue: mockNewsRepo,
+        },
+      ],
     }).compile();
 
     service = module.get<NewsService>(NewsService);

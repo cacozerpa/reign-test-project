@@ -9,6 +9,5 @@ export class AuthController {
   @Post()
   signInLocal() {
     return this.authService.signInLocal();
-
   }
 }
