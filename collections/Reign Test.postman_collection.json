@@ -188,7 +188,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/news/title?title=",
+					"raw": "http://localhost:3000/api/news/title?title=How I made Google’s data grid scroll faster with a line of CSS",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -332,7 +332,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/news/tags?tags=",
+					"raw": "http://localhost:3000/api/news/tags?tags=comment,author_robbiejs,story_29018804",
 					"protocol": "http",
 					"host": [
 						"localhost"
